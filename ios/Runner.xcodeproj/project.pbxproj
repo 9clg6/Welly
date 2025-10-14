@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -19,7 +19,7 @@
 		9D2A746C9E93980074C0C2E7 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 103CD136617EC286591A3C05 /* Pods_RunnerTests.framework */; };
 		EB770EBA2E7ED1BE003858FE /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB770EB92E7ED1BE003858FE /* StoreKit.framework */; };
 		EB89DA8B2E9E97B600067A47 /* Flutter.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB89DA8A2E9E97B600067A47 /* Flutter.xcframework */; };
-		EB89DA8C2E9E97B600067A47 /* Flutter.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EB89DA8A2E9E97B600067A47 /* Flutter.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		EB89DA8E2E9E9D7C00067A47 /* FirebaseCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB89DA8D2E9E9D7C00067A47 /* FirebaseCore.framework */; };
 		EBD1BB852E8C8861002AB48D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		EBD1BB862E8C8861002AB48D /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		EBD1BB872E8C8861002AB48D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
@@ -36,20 +36,6 @@
 			remoteInfo = Runner;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		9705A1C41CF9048500538489 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				EB89DA8C2E9E97B600067A47 /* Flutter.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0C1BEA8A8F4A0B8FA38A7BCB /* Pods-RunnerTests.debug-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug-dev.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug-dev.xcconfig"; sourceTree = "<group>"; };
@@ -96,6 +82,7 @@
 		EB770EBE2E7ED1C3003858FE /* RunnerProfile-staging.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "RunnerProfile-staging.entitlements"; sourceTree = "<group>"; };
 		EB770EBF2E7ED1C4003858FE /* RunnerProfile-prod.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "RunnerProfile-prod.entitlements"; sourceTree = "<group>"; };
 		EB89DA8A2E9E97B600067A47 /* Flutter.xcframework */ = {isa = PBXFileReference; expectedSignature = "AppleDeveloperProgram:S8QB4VV633:FLUTTER.IO LLC"; lastKnownFileType = wrapper.xcframework; name = Flutter.xcframework; path = ../../../fvm/versions/3.35.2/bin/cache/artifacts/engine/ios/Flutter.xcframework; sourceTree = "<group>"; };
+		EB89DA8D2E9E9D7C00067A47 /* FirebaseCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBD162212E82E6A600349347 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		FFC022656E369F8B249BF667 /* Pods-RunnerTests.profile-staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile-staging.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile-staging.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -113,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB89DA8E2E9E9D7C00067A47 /* FirebaseCore.framework in Frameworks */,
 				EB89DA8B2E9E97B600067A47 /* Flutter.xcframework in Frameworks */,
 				EB770EBA2E7ED1BE003858FE /* StoreKit.framework in Frameworks */,
 				6BCB167B56FE429498956041 /* Pods_Runner.framework in Frameworks */,
@@ -125,6 +113,7 @@
 		0A108CFA108EECB3B4ED9ECF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EB89DA8D2E9E9D7C00067A47 /* FirebaseCore.framework */,
 				EB89DA8A2E9E97B600067A47 /* Flutter.xcframework */,
 				EB770EB92E7ED1BE003858FE /* StoreKit.framework */,
 				74656E2E3E93E3C250433F99 /* Pods_Runner.framework */,
@@ -253,7 +242,6 @@
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
-				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				8A096C4E2A5DE49C29703EDE /* [CP] Copy Pods Resources */,
 			);
@@ -359,13 +347,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
