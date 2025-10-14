@@ -79,13 +79,12 @@ lib/
 ### **Key Technologies**
 
 #### **Frontend & UI**
-- **Flutter 3.3+** - Cross-platform mobile development
+- **Flutter 3.35.2** - Cross-platform mobile development
 - **Material Design 3** - Modern, accessible UI components
 - **Custom animations** - Smooth, engaging user experience
-- **Responsive design** - Works perfectly on all screen sizes
 
 #### **State & Data**
-- **Riverpod 2.6+** - Advanced state management
+- **Riverpod 3.0.1** - Advanced state management
 - **Sembast** - Local NoSQL database
 - **Dio** - HTTP client for API communication
 - **Retrofit** - Type-safe HTTP client generation
@@ -98,7 +97,6 @@ lib/
 #### **Localization & Internationalization**
 - **Easy Localization** - Multi-language support
 - **Code generation** - Type-safe localization keys
-- **RTL support** - Right-to-left language support
 
 #### **Development Tools**
 - **Build Runner** - Code generation pipeline
@@ -119,6 +117,11 @@ fvm dart run easy_localization:generate \
   --source-dir=assets/translations -f keys
 ```
 
+```bash
+# Generate all translations
+make localization
+```
+
 #### **Environment Management**
 - **Development** - Debug builds with logging
 - **Staging** - Pre-production testing
@@ -127,8 +130,7 @@ fvm dart run easy_localization:generate \
 ## 🛠️ Getting Started
 
 ### **Prerequisites**
-- Flutter 3.8.0 or higher
-- Dart 3.0.0 or higher
+- Flutter 3.35.2
 - FVM (Flutter Version Manager) for consistent Flutter versions
 
 ### **Installation**
@@ -139,7 +141,7 @@ cd motivation-app
 
 # Install FVM and Flutter
 fvm install
-fvm use stable
+fvm use
 
 # Install dependencies
 fvm flutter pub get
@@ -148,19 +150,11 @@ fvm flutter pub get
 make generate
 make localization
 
-# Run the app
-fvm flutter run
-```
+# Build the app
+fvm flutter build ios --release --flavor prod
 
-### **Project Structure**
-```
-motivation-app/
-├── android/          # Android-specific code
-├── ios/             # iOS-specific code
-├── lib/             # Main Dart code
-├── assets/          # Images, fonts, translations
-├── test/            # Unit and widget tests
-└── Makefile         # Build automation
+# Run the app
+fvm flutter run x
 ```
 
 ## 📱 User Experience
@@ -191,20 +185,6 @@ motivation-app/
 - **Universal applicability** across different cultures and age groups
 - **Cost-effective** intervention requiring minimal time investment
 
-## 🎨 Design Philosophy
-
-### **Visual Identity**
-- **Calming colors** - Soft, non-stimulating palette
-- **Organic shapes** - Natural, flowing design elements
-- **Minimalist approach** - Focus on content, not distractions
-- **Accessibility first** - High contrast, readable fonts
-
-### **User Experience Principles**
-- **Simplicity** - Easy to use, hard to misuse
-- **Consistency** - Predictable interactions and patterns
-- **Feedback** - Clear responses to user actions
-- **Progressive disclosure** - Information revealed as needed
-
 ## 🚀 Future Roadmap
 
 ### **Phase 1: Core Features** ✅
@@ -214,16 +194,9 @@ motivation-app/
 - [x] Multi-language support
 
 ### **Phase 2: Advanced Features** 🚧
-- [ ] AI-powered insights
+- [x] AI-powered insights
 - [ ] Community features
 - [ ] Advanced analytics
-- [ ] Integration with health apps
-
-### **Phase 3: Platform Expansion** 📋
-- [ ] Web application
-- [ ] Desktop application
-- [ ] Wearable integration
-- [ ] API for developers
 
 ## 🤝 Contributing
 
@@ -253,13 +226,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Research community** - Countless studies that validate our approach
 - **Open source community** - Tools and libraries that make this possible
 - **Beta testers** - Early users who provided valuable feedback
-
-## 📞 Contact & Support
-
-- **Website**: [motivation-app.com](https://motivation-app.com)
-- **Email**: support@motivation-app.com
-- **GitHub**: [github.com/your-username/motivation-app](https://github.com/your-username/motivation-app)
-- **Documentation**: [docs.motivation-app.com](https://docs.motivation-app.com)
 
 ---
 
