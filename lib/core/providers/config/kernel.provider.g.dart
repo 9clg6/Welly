@@ -6,24 +6,42 @@ part of 'kernel.provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$kernelHash() => r'ddc50744ba55a1edd3175b126500504878cf2eb3';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+/// Kernel provider
+
+@ProviderFor(kernel)
+const kernelProvider = KernelProvider._();
 
 /// Kernel provider
-///
-/// Copied from [kernel].
-@ProviderFor(kernel)
-final kernelProvider = FutureProvider<void>.internal(
-  kernel,
-  name: r'kernelProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$kernelHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef KernelRef = FutureProviderRef<void>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class KernelProvider
+    extends $FunctionalProvider<AsyncValue<void>, void, FutureOr<void>>
+    with $FutureModifier<void>, $FutureProvider<void> {
+  /// Kernel provider
+  const KernelProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'kernelProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$kernelHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<void> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<void> create(Ref ref) {
+    return kernel(ref);
+  }
+}
+
+String _$kernelHash() => r'b5f2f5645ec07cbeebcea698a316c446940ebae8';

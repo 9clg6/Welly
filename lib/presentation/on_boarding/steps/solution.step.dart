@@ -60,7 +60,7 @@ class _SolutionStepState extends ConsumerState<SolutionStep> {
         _index++;
       });
     } else {
-      ref.read(onBoardingViewModelProvider.notifier).nextStep();
+      ref.watch(onBoardingViewModelProvider.notifier).nextStep();
     }
   }
 

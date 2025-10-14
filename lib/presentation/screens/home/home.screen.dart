@@ -11,7 +11,9 @@ import 'package:welly/presentation/screens/home/home.state.dart';
 import 'package:welly/presentation/screens/home/home.view_model.dart';
 import 'package:welly/presentation/widgets/cards_stack_indicator.dart';
 import 'package:welly/presentation/widgets/continue_button_card.dart';
+import 'package:welly/presentation/widgets/custom_loader.dart';
 import 'package:welly/presentation/widgets/entry_card.dart';
+import 'package:welly/presentation/widgets/error_placeholder.dart';
 import 'package:welly/presentation/widgets/form_input.dart';
 import 'package:welly/presentation/widgets/gradient_background.dart';
 import 'package:welly/presentation/widgets/text_variant.dart';
@@ -88,8 +90,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           expandController: _expandController,
           messageFade: _messageFade,
         ),
-        error: (Object error, StackTrace stackTrace) => const SizedBox.shrink(),
-        loading: () => const SizedBox.shrink(),
+        error: ErrorPlaceholder.new,
+        loading: CustomLoader.new,
       ),
     );
   }
@@ -164,9 +166,6 @@ class _CongratsOverlayParent extends ConsumerWidget {
               builder: (BuildContext context, Widget? child) {
                 final double screenWidth = MediaQuery.of(context).size.width;
                 final double screenHeight = MediaQuery.of(context).size.height;
-
-                // Calculate the radius based on animation progress
-                // Start from 10px and grow to cover the entire screen
                 final double maxRadius = math.sqrt(
                   math.pow(screenWidth / 2, 2) + math.pow(screenHeight / 2, 2),
                 );
@@ -455,12 +454,6 @@ class _NextButton extends ConsumerWidget {
                   key: viewModel.flowerKey,
                   width: 200,
                 ),
-                // const Gap(16),
-                // ContinueButtonCard(
-                //   title: 'Test',
-                //   key: const ValueKey<String>('full-completed-button'),
-                //   onTap: viewModel.triggerFullCompleted,
-                // ),
               ],
             )
           : const SizedBox.shrink(key: ValueKey<String>('validation-hidden')),

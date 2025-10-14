@@ -24,17 +24,11 @@ class AnalyticsEvents {
   static const String skipAuthPressed = 'skip_auth_pressed';
 
   // Error tracking events
-  /// Authentication error occurred
-  static const String authError = 'auth_error';
-
   /// Network error occurred
   static const String networkError = 'network_error';
 
   /// Payment error occurred
   static const String paymentError = 'payment_error';
-
-  /// Permission error occurred
-  static const String permissionError = 'permission_error';
 
   /// System error occurred
   static const String systemError = 'system_error';
@@ -124,4 +118,19 @@ class AnalyticsEvents {
 
   /// appForegrounded
   static const String appForegrounded = 'app_foregrounded';
+
+  // Settings events
+  /// settingsNotificationsChanged
+  static const String settingsNotificationsChanged =
+      'settings_notifications_changed';
+
+  /// settingsLogoutConfirmed
+  static const String settingsLogoutConfirmed = 'settings_logout_confirmed';
+
+  /// settingsPrivacyOpened
+  static const String settingsPrivacyOpened = 'settings_privacy_opened';
+
+  /// settingsDeleteAccountConfirmed
+  static const String settingsDeleteAccountConfirmed =
+      'settings_delete_account_confirmed';
 }

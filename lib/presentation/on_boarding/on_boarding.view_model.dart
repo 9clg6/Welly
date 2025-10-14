@@ -15,7 +15,7 @@ part 'on_boarding.view_model.g.dart';
 class OnBoardingViewModel extends _$OnBoardingViewModel {
   @override
   OnBoardingState build() {
-    _navigationService = ref.read(navigationServiceProvider);
+    _navigationService = ref.watch(navigationServiceProvider);
     return OnBoardingState.initial();
   }
 
@@ -47,7 +47,7 @@ class OnBoardingViewModel extends _$OnBoardingViewModel {
   Future<void> completeOnboarding() async {
     final UserService userService = await ref.read(userServiceProvider.future);
 
-    final OnboardingService onboardingService = ref.read(
+    final OnboardingService onboardingService = ref.watch(
       onboardingServiceProvider.notifier,
     );
     final OnboardingAnswers currentAnswers = onboardingService.state;

@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:welly/core/extensions/date.extension.dart';
 import 'package:welly/core/localization/generated/locale_keys.g.dart';
 import 'package:welly/core/providers/core/services/ai.service.provider.dart';
+import 'package:welly/core/providers/core/services/dialog.service.provider.dart';
 import 'package:welly/core/providers/core/services/happen_action.service.provider.dart';
 import 'package:welly/core/providers/core/services/navigation.service.provider.dart';
 import 'package:welly/core/providers/core/services/notification.service.provider.dart';
@@ -48,6 +52,10 @@ class RealHomeViewModel extends _$RealHomeViewModel {
       state = AsyncValue<RealHomeState>.data(
         state.value!.copyWith(doesReportExist: reportExists),
       );
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.watch(dialogServiceProvider).showWarningDialog();
     });
 
     getStreak();
@@ -133,6 +141,7 @@ class RealHomeViewModel extends _$RealHomeViewModel {
         normalized.isAtSameMomentAs(start) || normalized.isAfter(start);
     final bool isOnOrBeforeEnd =
         normalized.isAtSameMomentAs(end) || normalized.isBefore(end);
+
     return isOnOrAfterStart && isOnOrBeforeEnd;
   }
 
@@ -156,16 +165,19 @@ class RealHomeViewModel extends _$RealHomeViewModel {
 
   /// Build streak message
   String buildStreakMessage() {
+    const int streakRowConst = 7;
+
     switch (streakDays) {
-      case < 7:
+      case < streakRowConst:
         return LocaleKeys.onboarding_streak_message_1.tr(
-          args: <String>[(7 - streakDays).toString()],
+          args: <String>[(streakRowConst - streakDays).toString()],
         );
-      case 7:
+      case streakRowConst:
         return LocaleKeys.onboarding_streak_message_2.tr();
-      case > 7:
+      case > streakRowConst:
         return LocaleKeys.onboarding_streak_message_3.tr();
     }
+
     return '';
   }
 
@@ -174,38 +186,14 @@ class RealHomeViewModel extends _$RealHomeViewModel {
     _navigationService.navigateToAnalyzeWithAi();
   }
 
-  /// On tap review old events
-  void onTapReviewOldEvents() {}
-
-  /// Test notification (for development purposes)
-  Future<void> testNotification() async {
-    try {
-      await _notificationService.showNotification(
-        id: 999,
-        title: 'Test de notification',
-        body: 'Ceci est un test de notification locale',
-        payload: 'test_notification',
-      );
-    } on Exception catch (e) {
-      debugPrint('Error showing test notification: $e');
-    }
-  }
-
-  /// Test Firebase Messaging
-  Future<void> testFirebaseMessaging() async {
-    try {
-      await _notificationService.testFirebaseMessaging();
-    } on Exception catch (e) {
-      debugPrint('Error testing Firebase: $e');
-    }
-  }
-
   /// Get Firebase status
   Future<Map<String, dynamic>> getFirebaseStatus() async {
     try {
       return await _notificationService.getFirebaseMessagingStatus();
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint('Error getting Firebase status: $e');
+      
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
       return <String, dynamic>{'error': e.toString()};
     }
   }
@@ -214,8 +202,9 @@ class RealHomeViewModel extends _$RealHomeViewModel {
   Future<String?> getFCMToken() async {
     try {
       return await _notificationService.getFCMToken();
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint('Error getting FCM token: $e');
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
       return null;
     }
   }
@@ -224,8 +213,14 @@ class RealHomeViewModel extends _$RealHomeViewModel {
   Future<void> testIOSConfiguration() async {
     try {
       await _notificationService.testIOSConfiguration();
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint('Error testing iOS configuration: $e');
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
     }
+  }
+
+  /// On tap settings
+  void onTapSettings() {
+    _navigationService.navigateToSettings();
   }
 }

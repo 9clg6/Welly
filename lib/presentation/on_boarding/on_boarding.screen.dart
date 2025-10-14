@@ -7,7 +7,7 @@ import 'package:welly/presentation/on_boarding/steps/calculation.step.dart';
 import 'package:welly/presentation/on_boarding/steps/education.step.dart';
 import 'package:welly/presentation/on_boarding/steps/goals.step.dart';
 import 'package:welly/presentation/on_boarding/steps/mini_diagnostic.step.dart';
-import 'package:welly/presentation/on_boarding/steps/paywell/paywall.step.dart';
+import 'package:welly/presentation/on_boarding/steps/paywall/paywall.step.dart';
 import 'package:welly/presentation/on_boarding/steps/post_paywall.step.dart';
 import 'package:welly/presentation/on_boarding/steps/pre_activation.step.dart';
 import 'package:welly/presentation/on_boarding/steps/solution.step.dart';

@@ -1,5 +1,5 @@
 import 'package:welly/core/providers/foundation/services/analytics.service.dart';
-import 'package:welly/core/providers/foundation/services/analytics_events.dart';
+import 'package:welly/foundation/events/analytics_events.dart';
 
 /// Enhanced analytics service with predefined tracking methods
 class TrackingService {
@@ -63,23 +63,6 @@ class TrackingService {
     await track(AnalyticsEvents.skipAuthPressed);
   }
 
-  // Error tracking methods
-  /// Track authentication error with context
-  Future<void> trackAuthError({
-    required String errorType,
-    String? provider,
-    String? errorCode,
-  }) async {
-    await track(
-      AnalyticsEvents.authError,
-      parameters: <String, Object>{
-        'error_type': errorType,
-        if (provider != null) 'provider': provider,
-        if (errorCode != null) 'error_code': errorCode,
-      },
-    );
-  }
-
   /// Track network error with context
   Future<void> trackNetworkError({
     required String operation,
@@ -108,20 +91,6 @@ class TrackingService {
         'error_type': errorType,
         if (packageId != null) 'package_id': packageId,
         if (errorCode != null) 'error_code': errorCode,
-      },
-    );
-  }
-
-  /// Track permission error with context
-  Future<void> trackPermissionError({
-    required String permissionType,
-    String? reason,
-  }) async {
-    await track(
-      AnalyticsEvents.permissionError,
-      parameters: <String, Object>{
-        'permission_type': permissionType,
-        if (reason != null) 'reason': reason,
       },
     );
   }
@@ -322,5 +291,31 @@ class TrackingService {
     Map<String, Object>? parameters,
   }) async {
     await _analyticsService.logEvent(eventName, parameters: parameters);
+  }
+
+  // Settings specific tracking
+  /// Track settings notifications changed
+  Future<void> trackSettingsNotificationsChanged({
+    required bool enabled,
+  }) async {
+    await track(
+      AnalyticsEvents.settingsNotificationsChanged,
+      parameters: <String, Object>{'enabled': enabled},
+    );
+  }
+
+  /// Track settings logout confirmed
+  Future<void> trackSettingsLogoutConfirmed() async {
+    await track(AnalyticsEvents.settingsLogoutConfirmed);
+  }
+
+  /// Track settings privacy opened
+  Future<void> trackSettingsPrivacyOpened() async {
+    await track(AnalyticsEvents.settingsPrivacyOpened);
+  }
+
+  /// Track settings delete account confirmed
+  Future<void> trackSettingsDeleteAccountConfirmed() async {
+    await track(AnalyticsEvents.settingsDeleteAccountConfirmed);
   }
 }

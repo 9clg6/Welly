@@ -92,13 +92,12 @@ class _GoalsStepState extends ConsumerState<GoalsStep> {
 
   void _continue() {
     if (_selectedGoals.isNotEmpty) {
-      // Save all selected goals
       for (final int goalId in _selectedGoals) {
-        ref.read(onboardingServiceProvider.notifier).setGoal(goalId);
+        ref.watch(onboardingServiceProvider.notifier).setGoal(goalId);
       }
 
-      ref.read(onBoardingViewModelProvider.notifier)
-        ..answers = ref.read(onboardingServiceProvider)
+      ref.watch(onBoardingViewModelProvider.notifier)
+        ..answers = ref.watch(onboardingServiceProvider)
         ..nextStep();
     }
   }

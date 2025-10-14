@@ -101,7 +101,7 @@ class FirstQuizzViewModel extends _$FirstQuizzViewModel {
     _onboardingService.setIdentity(firstName: name, age: age);
     final OnboardingAnswers updated = _onboardingService.state;
     state = state.copyWith(answers: updated, isCompleted: true);
-    ref.read(onBoardingViewModelProvider.notifier).answers = updated;
+    ref.watch(onBoardingViewModelProvider.notifier).answers = updated;
     return updated;
   }
 

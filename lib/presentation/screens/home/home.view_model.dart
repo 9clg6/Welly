@@ -13,6 +13,7 @@ import 'package:welly/core/providers/foundation/services/user.service.dart';
 import 'package:welly/core/providers/presentation/router.provider.dart';
 import 'package:welly/core/utils/debouncer.util.dart';
 import 'package:welly/presentation/screens/home/home.state.dart';
+import 'package:welly/presentation/widgets/text_variant.dart';
 
 part 'home.view_model.g.dart';
 
@@ -93,6 +94,7 @@ class HomeViewModel extends _$HomeViewModel {
           .navigatorKey
           .currentContext;
       if (context == null) return;
+      
       final OverlayState overlay = Overlay.of(context, rootOverlay: true);
 
       showSnackBar(overlay);
@@ -123,14 +125,9 @@ class HomeViewModel extends _$HomeViewModel {
             ],
           ),
           child: Center(
-            child: Text(
+            child: TextVariant(
               state.requireValue.topMotivationText.tr(),
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontWeight: FontWeight.w400,
-                decoration: TextDecoration.none,
-              ),
+              variantType: TextVariantType.bodyLarge,
               textAlign: TextAlign.center,
             ),
           ),
@@ -222,7 +219,7 @@ class HomeViewModel extends _$HomeViewModel {
     _happenActionService.markTodayEventsAsFilled();
 
     final bool? result = await _navigationService.navigateToReview();
- 
+
     if (isFromRealHome) {
       _navigationService.pop(result: result);
     } else {

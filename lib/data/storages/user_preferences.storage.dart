@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:welly/data/model/local/onboarding_answers.local.model.dart';
@@ -14,6 +16,7 @@ class UserPreferencesStorage {
   static const String _onboardingCompletedKey = 'onboarding_completed';
   static const String _onboardingAnswersKey = 'onboarding_answers';
   static const String _userKey = 'user';
+  static const String _notificationsEnabledKey = 'notifications_enabled';
 
   /// Get SharedPreferences instance
   Future<SharedPreferences> get _prefs async {
@@ -64,6 +67,18 @@ class UserPreferencesStorage {
     await prefs.remove(_userKey);
   }
 
+  /// Get notifications enabled flag (default: true)
+  Future<bool> getNotificationsEnabled() async {
+    final SharedPreferences prefs = await _prefs;
+    return prefs.getBool(_notificationsEnabledKey) ?? true;
+  }
+
+  /// Set notifications enabled flag
+  Future<void> setNotificationsEnabled({required bool enabled}) async {
+    final SharedPreferences prefs = await _prefs;
+    await prefs.setBool(_notificationsEnabledKey, enabled);
+  }
+
   /// Save onboarding answers
   Future<void> saveOnboardingAnswers(
     OnboardingAnswersLocalModel localModel,
@@ -83,8 +98,9 @@ class UserPreferencesStorage {
             jsonDecode(answersString) as Map<String, dynamic>;
         return OnboardingAnswersLocalModel.fromJson(answersMap);
       }
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint('Error getting onboarding answers: $e');
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
       rethrow;
     }
     return null;
@@ -109,8 +125,9 @@ class UserPreferencesStorage {
 
         return UserLocalModel.fromJson(userMap);
       }
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint('Error getting user: $e');
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
       rethrow;
     }
     return null;

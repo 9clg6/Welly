@@ -1,35 +1,21 @@
-default_platform(:android)
+lane :beta do
+  # 1) Déterminer un build-number unique
+  #    - Priorité aux variables CI courantes
+  #    - Fallback: epoch (secondes) pour rester < 2_147_483_647
+  build_number = ENV['BUILD_NUMBER'] || ENV['CI_PIPELINE_IID'] || ENV['GITHUB_RUN_NUMBER'] || Time.now.to_i.to_s
 
-platform :android do
-  desc "Build Flutter App Bundle"
+  UI.message("[beta] build_number=#{build_number}")
 
-  lane :build do
-    project_root = File.expand_path('../../', __dir__)
-    Dir.chdir(project_root) do
-      sh "fvm flutter clean"
-      sh "fvm flutter pub get"
-      sh "fvm flutter build appbundle --release --flavor prod"
-    end
-  end
+  # 2) Construire l'AAB via FVM (Flutter) avec override du build-number
+  #    On est dans android/, donc on remonte à la racine du projet pour lancer Flutter
+  sh("cd .. && fvm flutter build appbundle --flavor prod --release --build-number #{build_number}")
 
-  desc "Upload to Internal Testing"
-  lane :beta do
-    build
-    upload_to_play_store(
-      track: 'internal',
-      aab: '../build/app/outputs/bundle/prodRelease/app-prod-release.aab',
-      skip_upload_metadata: true,
-      skip_upload_images: true,
-      skip_upload_screenshots: true
-    )
-  end
+  # 3) Résoudre le chemin de sortie de l'AAB (depuis la racine du repo)
+  repo_root = File.expand_path('../..', __dir__)
+  aab_path = File.join(repo_root, 'build', 'app', 'outputs', 'bundle', 'prodRelease', 'app-prod-release.aab')
 
-  desc "Deploy to Production"
-  lane :release do
-    build
-    upload_to_play_store(
-      track: 'production',
-      aab: '../build/app/outputs/bundle/prodRelease/app-prod-release.aab'
-    )
-  end
+  UI.user_error!("AAB introuvable à #{aab_path}") unless File.exist?(aab_path)
+
+  # 4) Upload Play Store (track beta) avec options sûres
+  upload_to_play_store(track: 'beta', aab: aab_path, validate_only: true)
 end

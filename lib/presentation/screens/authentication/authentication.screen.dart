@@ -21,10 +21,17 @@ import 'package:welly/presentation/widgets/text_variant.dart';
 @RoutePage()
 class AuthenticationScreen extends ConsumerStatefulWidget {
   /// Constructor
-  const AuthenticationScreen({this.onFinished, super.key});
+  const AuthenticationScreen({
+    this.onFinished,
+    this.isFromRealHome = false,
+    super.key,
+  });
 
   /// On finished
   final void Function()? onFinished;
+
+  /// Show the cross if coming from RealHome/Settings
+  final bool isFromRealHome;
 
   /// Create State
   @override
@@ -41,6 +48,18 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
     );
 
     return Scaffold(
+      extendBodyBehindAppBar: widget.isFromRealHome,
+      appBar: widget.isFromRealHome
+          ? AppBar(
+              backgroundColor: Colors.transparent,
+              actions: <Widget>[
+                IconButton(
+                  icon: const Icon(Icons.close, color: Colors.white),
+                  onPressed: () => context.router.maybePop(),
+                ),
+              ],
+            )
+          : null,
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 48),
         decoration: BoxDecoration(
@@ -94,7 +113,6 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
                     if (Platform.isIOS)
                       SignInWithAppleButton(
                         onPressed: () async {
-                          // Track Apple login button press
                           final TrackingService trackingService = ref.watch(
                             trackingServiceProvider,
                           );
@@ -110,7 +128,6 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
                       width: double.infinity,
                       child: TappableComponent(
                         onTap: () async {
-                          // Track Google login button press
                           final TrackingService trackingService = ref.watch(
                             trackingServiceProvider,
                           );
@@ -161,7 +178,6 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
                     Center(
                       child: TextButton(
                         onPressed: () async {
-                          // Track skip auth button press
                           final TrackingService trackingService = ref.watch(
                             trackingServiceProvider,
                           );

@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -18,9 +21,22 @@ class NotificationService {
   /// Firebase messaging instance
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
+  /// Push enabled state
+  bool _pushEnabled = true;
+
+  /// Subject pour diffuser l'état d'activation des notifications
+  final BehaviorSubject<bool> _notificationsEnabledSubject =
+      BehaviorSubject<bool>.seeded(true);
+
+  /// Stream public de l'état des notifications (push/local)
+  Stream<bool> get notificationsEnabledStream =>
+      _notificationsEnabledSubject.stream;
+
   /// Initialize the notification service
-  Future<void> initialize() async {
+  Future<void> initialize({bool pushEnabled = true}) async {
     try {
+      _pushEnabled = pushEnabled;
+      _notificationsEnabledSubject.add(_pushEnabled);
       // Initialize timezone data
       tz.initializeTimeZones();
 
@@ -30,20 +46,63 @@ class NotificationService {
       // Initialize local notifications
       await _initializeLocalNotifications();
 
-      // Request permissions
-      await _requestPermissions();
+      // Request permissions (only if push enabled)
+      if (_pushEnabled) {
+        await _requestPermissions();
+      }
 
-      // Setup daily reminders (multiple for better reliability)
-      await scheduleMultipleDailyReminders();
+      // Setup daily reminders if enabled
+      if (_pushEnabled) {
+        await scheduleMultipleDailyReminders();
+      }
 
       // Check and reschedule if needed
       await checkAndRescheduleNotifications();
 
       debugPrint('[NotificationService] Initialized successfully');
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint('[NotificationService] Initialization error: $e');
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
       rethrow;
     }
+  }
+
+  /// Enable or disable push notifications at runtime
+  Future<void> setPushNotificationsEnabled({required bool enabled}) async {
+    try {
+      _pushEnabled = enabled;
+      await _firebaseMessaging.setAutoInitEnabled(enabled);
+      _notificationsEnabledSubject.add(enabled);
+
+      if (!enabled) {
+        // Cancel all local notifications
+        await cancelAllNotifications();
+        // Delete FCM token and unsubscribe from test topics
+        try {
+          await _firebaseMessaging.deleteToken();
+        } on Exception catch (e, s) {
+          debugPrint('[NotificationService] Error deleting FCM token: $e');
+          unawaited(FirebaseCrashlytics.instance.recordError(e, s));
+        }
+        try {
+          await unsubscribeFromTopic('test_notifications');
+        } on Exception {
+          // ignore
+        }
+      } else {
+        // Recreate token and resubscribe logic happens automatically on demand
+        // Re-schedule reminders
+        await scheduleMultipleDailyReminders();
+      }
+    } on Exception catch (e, s) {
+      debugPrint('[NotificationService] Error toggling push: $e');
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
+    }
+  }
+
+  /// Dispose stream
+  void dispose() {
+    _notificationsEnabledSubject.close();
   }
 
   /// Initialize Firebase Messaging
@@ -95,8 +154,9 @@ class NotificationService {
         } else {
           debugPrint('[NotificationService] FCM Token not available');
         }
-      } on Exception catch (e) {
+      } on Exception catch (e, s) {
         debugPrint('[NotificationService] Could not get FCM token: $e');
+        unawaited(FirebaseCrashlytics.instance.recordError(e, s));
       }
 
       _firebaseMessaging.onTokenRefresh.listen((String token) {
@@ -135,8 +195,9 @@ class NotificationService {
         );
         debugPrint('[NotificationService] Message data: ${message.data}');
       });
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint('[NotificationService] Firebase initialization error: $e');
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
     }
   }
 
@@ -160,10 +221,11 @@ class NotificationService {
       );
 
       debugPrint('[NotificationService] Local notifications initialized');
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint(
         '[NotificationService] Local notifications initialization error: $e',
       );
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
       rethrow;
     }
   }
@@ -197,8 +259,9 @@ class NotificationService {
           'Firebase Messaging',
         );
       }
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint('[NotificationService] Permission request error: $e');
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
     }
   }
 
@@ -245,8 +308,9 @@ class NotificationService {
         return granted;
       }
       return false;
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint('[NotificationService] Explicit permission request error: $e');
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
       return false;
     }
   }
@@ -268,10 +332,11 @@ class NotificationService {
             settings.authorizationStatus == AuthorizationStatus.provisional;
       }
       return false;
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint(
         '[NotificationService] Error checking notification status: $e',
       );
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
       return false;
     }
   }
@@ -303,10 +368,11 @@ class NotificationService {
       }
 
       return granted;
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint(
         '[NotificationService] Error in requestPermissionsWithDelay: $e',
       );
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
       return false;
     }
   }
@@ -396,8 +462,9 @@ class NotificationService {
       );
 
       debugPrint('[NotificationService] Immediate notification shown: $title');
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint('[NotificationService] Error showing notification: $e');
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
     }
   }
 
@@ -406,8 +473,9 @@ class NotificationService {
     try {
       await _localNotifications.cancel(id);
       debugPrint('[NotificationService] Notification cancelled: $id');
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint('[NotificationService] Error cancelling notification: $e');
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
     }
   }
 
@@ -416,10 +484,11 @@ class NotificationService {
     try {
       await _localNotifications.cancelAll();
       debugPrint('[NotificationService] All notifications cancelled');
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint(
         '[NotificationService] Error cancelling all notifications: $e',
       );
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
     }
   }
 
@@ -427,8 +496,9 @@ class NotificationService {
   Future<String?> getFCMToken() async {
     try {
       return await _firebaseMessaging.getToken();
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint('[NotificationService] Error getting FCM token: $e');
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
       return null;
     }
   }
@@ -448,8 +518,9 @@ class NotificationService {
         'fcmToken': token,
         'isTokenAvailable': token != null,
       };
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint('[NotificationService] Error getting Firebase status: $e');
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
       return <String, dynamic>{'error': e.toString()};
     }
   }
@@ -474,8 +545,9 @@ class NotificationService {
         body: 'Firebase Messaging est configuré correctement',
         payload: 'firebase_test',
       );
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint('[NotificationService] Error testing Firebase: $e');
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
     }
   }
 
@@ -531,8 +603,9 @@ class NotificationService {
       debugPrint(
         '[NotificationService] Make sure the app is in background when testing',
       );
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint('[NotificationService] ❌ iOS configuration test error: $e');
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
     }
   }
 
@@ -541,8 +614,9 @@ class NotificationService {
     try {
       await _firebaseMessaging.subscribeToTopic(topic);
       debugPrint('[NotificationService] Subscribed to topic: $topic');
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint('[NotificationService] Error subscribing to topic: $e');
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
     }
   }
 
@@ -551,8 +625,9 @@ class NotificationService {
     try {
       await _firebaseMessaging.unsubscribeFromTopic(topic);
       debugPrint('[NotificationService] Unsubscribed from topic: $topic');
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint('[NotificationService] Error unsubscribing from topic: $e');
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
     }
   }
 
@@ -613,8 +688,9 @@ class NotificationService {
       debugPrint(
         '[NotificationService] Daily reminder updated to $hour:$minute',
       );
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint('[NotificationService] Error updating daily reminder: $e');
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
     }
   }
 
@@ -661,10 +737,11 @@ class NotificationService {
       );
 
       debugPrint('[NotificationService] Multiple daily reminders scheduled');
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint(
         '[NotificationService] Error scheduling multiple reminders: $e',
       );
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
     }
   }
 
@@ -729,8 +806,9 @@ class NotificationService {
       } else {
         debugPrint('[NotificationService] All daily reminders are scheduled');
       }
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint('[NotificationService] Error checking notifications: $e');
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
     }
   }
 
@@ -738,10 +816,11 @@ class NotificationService {
   Future<List<PendingNotificationRequest>> getPendingNotifications() async {
     try {
       return await _localNotifications.pendingNotificationRequests();
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       debugPrint(
         '[NotificationService] Error getting pending notifications: $e',
       );
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
       return <PendingNotificationRequest>[];
     }
   }

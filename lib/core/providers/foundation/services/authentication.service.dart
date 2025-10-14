@@ -121,15 +121,14 @@ class AuthenticationService {
 
       final User? user = userCredential.user;
       if (user != null) {
-        // Associate user ID with Analytics and Crashlytics
-        //for better reporting.
         unawaited(_analyticsService.setUserId(user.uid));
         unawaited(FirebaseCrashlytics.instance.setUserIdentifier(user.uid));
       }
 
       return user;
-    } catch (e) {
+    } on Exception catch (e, s) {
       debugPrint('Google Sign-In Error: $e');
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
       rethrow;
     }
   }
@@ -187,10 +186,38 @@ class AuthenticationService {
       _userService.updateAndSaveUser(null);
 
       _navigationService.navigateToSignInPage();
-    } on Exception catch (exception) {
+    } on Exception catch (exception, s) {
       debugPrint('logout: error during logout: $exception');
+      unawaited(FirebaseCrashlytics.instance.recordError(exception, s));
       _userService.updateAndSaveUser(null);
       _navigationService.navigateToSignInPage();
+    }
+  }
+
+  /// Delete current user account from Firebase and cleanup local state
+  Future<void> deleteAccount() async {
+    final User? user = _firebaseAuth.currentUser;
+    if (user == null) {
+      return;
+    }
+
+    Future<void> cleanupAndNavigate() async {
+      try {
+        await _logoutUseCase.execute();
+      } on Exception {
+        // swallow cleanup errors
+      }
+      _userService.updateAndSaveUser(null);
+      _navigationService.navigateToSignInPage();
+    }
+
+    try {
+      await user.delete();
+      await cleanupAndNavigate();
+    } on FirebaseAuthException catch (e, s) {
+      debugPrint('deleteAccount error: ${e.code}');
+      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
+      rethrow;
     }
   }
 }
