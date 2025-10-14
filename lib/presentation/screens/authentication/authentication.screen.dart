@@ -30,7 +30,7 @@ class AuthenticationScreen extends ConsumerStatefulWidget {
   /// On finished
   final void Function()? onFinished;
 
-  /// Affiche la croix si on vient de RealHome/Settings
+  /// Show the cross if coming from RealHome/Settings
   final bool isFromRealHome;
 
   /// Create State
@@ -113,7 +113,6 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
                     if (Platform.isIOS)
                       SignInWithAppleButton(
                         onPressed: () async {
-                          // Track Apple login button press
                           final TrackingService trackingService = ref.watch(
                             trackingServiceProvider,
                           );
@@ -129,7 +128,6 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
                       width: double.infinity,
                       child: TappableComponent(
                         onTap: () async {
-                          // Track Google login button press
                           final TrackingService trackingService = ref.watch(
                             trackingServiceProvider,
                           );
@@ -180,7 +178,6 @@ class _AuthenticationScreenState extends ConsumerState<AuthenticationScreen> {
                     Center(
                       child: TextButton(
                         onPressed: () async {
-                          // Track skip auth button press
                           final TrackingService trackingService = ref.watch(
                             trackingServiceProvider,
                           );

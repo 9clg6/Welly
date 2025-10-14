@@ -25,12 +25,12 @@ class SettingsNotificationsTile extends ConsumerWidget {
                 ? Icons.notifications_active_outlined
                 : Icons.notifications_off_outlined,
           ),
-          title: Text(
+          title: TextVariant(
             enabled
                 ? LocaleKeys.settings_notifications_disable_title.tr()
                 : (LocaleKeys.settings_notifications_enable_title.tr()),
           ),
-          subtitle: Text(
+          subtitle: TextVariant(
             enabled
                 ? LocaleKeys.settings_notifications_disable_subtitle.tr()
                 : (LocaleKeys.settings_notifications_enable_subtitle.tr()),
@@ -39,6 +39,7 @@ class SettingsNotificationsTile extends ConsumerWidget {
             final bool applied = await vm.confirmNotificationsChangeAndApply(
               currentEnabled: enabled,
             );
+
             if (applied && context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(

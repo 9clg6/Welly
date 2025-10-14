@@ -276,7 +276,8 @@ class CodegenLoader extends AssetLoader{
   "settings_delete_account_title": "Delete account",
   "settings_delete_account_subtitle": "Permanently delete your account and data",
   "settings_delete_account_message": "This action will permanently delete your account and data. This cannot be undone.",
-  "settings_delete_account_confirm": "Delete account"
+  "settings_delete_account_confirm": "Delete account",
+  "aiAnalyze_quit": "Leave"
 };
 static const Map<String,dynamic> _fr = {
   "first": "Bonjour",
@@ -540,7 +541,8 @@ static const Map<String,dynamic> _fr = {
   "settings_delete_account_title": "Supprimer le compte",
   "settings_delete_account_subtitle": "Supprimer définitivement ton compte et tes données",
   "settings_delete_account_message": "Cette action supprimera définitivement ton compte et tes données. Elle est irréversible.",
-  "settings_delete_account_confirm": "Supprimer le compte"
+  "settings_delete_account_confirm": "Supprimer le compte",
+  "aiAnalyze_quit": "Quitter"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": _en, "fr": _fr};
 }

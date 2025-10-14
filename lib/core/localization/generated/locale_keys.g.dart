@@ -264,5 +264,6 @@ abstract class  LocaleKeys {
   static const settings_delete_account_subtitle = 'settings_delete_account_subtitle';
   static const settings_delete_account_message = 'settings_delete_account_message';
   static const settings_delete_account_confirm = 'settings_delete_account_confirm';
+  static const aiAnalyze_quit = 'aiAnalyze_quit';
 
 }

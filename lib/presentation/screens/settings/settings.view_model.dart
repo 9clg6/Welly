@@ -38,13 +38,13 @@ class SettingsViewModel extends _$SettingsViewModel {
 
   /// Ouvre la politique de confidentialité et trace l'action
   Future<void> openPrivacyUrlAndTrack() async {
-    await ref.read(trackingServiceProvider).trackSettingsPrivacyOpened();
+    await ref.watch(trackingServiceProvider).trackSettingsPrivacyOpened();
     await openPrivacyUrl();
   }
 
   /// Déconnexion utilisateur
   Future<void> logout() async {
-    final AuthenticationService authService = await ref.read(
+    final AuthenticationService authService = await ref.watch(
       authenticationServiceProvider.future,
     );
     await authService.logout();
@@ -54,12 +54,12 @@ class SettingsViewModel extends _$SettingsViewModel {
   /// Retourne true si confirmé
   Future<bool> confirmAndLogout() async {
     final bool? confirmed = await ref
-        .read(dialogServiceProvider)
+        .watch(dialogServiceProvider)
         .confirmLogout();
 
     if (confirmed ?? false) {
       await logout();
-      await ref.read(trackingServiceProvider).trackSettingsLogoutConfirmed();
+      await ref.watch(trackingServiceProvider).trackSettingsLogoutConfirmed();
       return true;
     }
 
@@ -80,12 +80,12 @@ class SettingsViewModel extends _$SettingsViewModel {
     required bool currentEnabled,
   }) async {
     final bool? confirmed = await ref
-        .read(dialogServiceProvider)
+        .watch(dialogServiceProvider)
         .confirmNotificationsChange(activating: !currentEnabled);
     if (confirmed ?? false) {
       await setNotificationState(value: !currentEnabled);
       await ref
-          .read(trackingServiceProvider)
+          .watch(trackingServiceProvider)
           .trackSettingsNotificationsChanged(enabled: !currentEnabled);
       return true;
     }
@@ -95,7 +95,7 @@ class SettingsViewModel extends _$SettingsViewModel {
   /// Confirme et supprime le compte (Firebase) conformément à 5.1.1(v)
   Future<bool> confirmAndDeleteAccount() async {
     final bool? confirmed = await ref
-        .read(dialogServiceProvider)
+        .watch(dialogServiceProvider)
         .showConfirmDialog(
           title: LocaleKeys.settings_delete_account_title.tr(),
           description: LocaleKeys.settings_delete_account_message.tr(),
@@ -104,12 +104,12 @@ class SettingsViewModel extends _$SettingsViewModel {
         );
 
     if (confirmed ?? false) {
-      final AuthenticationService authService = await ref.read(
+      final AuthenticationService authService = await ref.watch(
         authenticationServiceProvider.future,
       );
       await authService.deleteAccount();
       await ref
-          .read(trackingServiceProvider)
+          .watch(trackingServiceProvider)
           .trackSettingsDeleteAccountConfirmed();
       return true;
     }

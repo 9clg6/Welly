@@ -29,7 +29,7 @@ class SettingsScreen extends ConsumerWidget {
         appBar: CustomAppBar(
           title: TextVariant(
             LocaleKeys.settings_title.tr(),
-            style: Theme.of(context).textTheme.titleMedium,
+            variantType: TextVariantType.titleMedium,
           ),
         ),
         body: ListView(

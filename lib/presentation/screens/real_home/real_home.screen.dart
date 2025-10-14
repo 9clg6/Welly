@@ -35,12 +35,7 @@ class _RealHomeScreenState extends ConsumerState<RealHomeScreen> {
     );
     return state.when(
       data: _HasDataBody.new,
-      error: (Object error, StackTrace stackTrace) => Center(
-        child: TextVariant(
-          error.toString(),
-          color: Theme.of(context).colorScheme.error,
-        ),
-      ),
+      error: ErrorPlaceholder.new,
       loading: CustomLoader.new,
     );
   }
@@ -68,11 +63,7 @@ class _HasDataBodyState extends ConsumerState<_HasDataBody>
               padding: const EdgeInsets.only(left: 16, right: 16),
               child: ListView(
                 children: <Widget>[
-                  ...<Widget>[
-                    _MainActionBtn(
-                      isTodayEventsFilled: data.isTodayEventsFilled,
-                    ),
-                  ],
+                  _MainActionBtn(isTodayEventsFilled: data.isTodayEventsFilled),
                   const _AnalyzeWithAiBtn(),
                   const Gap(24),
                   _BigContainerStreak(),
@@ -99,14 +90,11 @@ class _ReviewOldEventsBtn extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final RealHomeViewModel viewModel = ref.watch(
-      realHomeViewModelProvider.notifier,
-    );
 
     return TappableComponent(
       color: Colors.transparent,
       splashColor: colorScheme.onPrimary.withAlpha(30),
-      onTap: viewModel.onTapReviewOldEvents,
+      onTap: () {},
       borderRadius: BorderRadius.circular(24),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24),
@@ -243,8 +231,8 @@ class _HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
         ),
         automaticallyImplyLeading: false,
       ),
-      error: (Object error, StackTrace stackTrace) => const SizedBox.shrink(),
-      loading: () => const SizedBox.shrink(),
+      error: ErrorPlaceholder.new,
+      loading: CustomLoader.new,
     );
   }
 

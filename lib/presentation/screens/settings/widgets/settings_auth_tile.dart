@@ -7,6 +7,9 @@ import 'package:welly/core/providers/core/services/user.service.provider.dart';
 import 'package:welly/core/providers/foundation/services/user.service.dart';
 import 'package:welly/foundation/routing/app_router.dart';
 import 'package:welly/presentation/screens/settings/settings.view_model.dart';
+import 'package:welly/presentation/widgets/custom_loader.dart';
+import 'package:welly/presentation/widgets/error_placeholder.dart';
+import 'package:welly/presentation/widgets/text_variant.dart';
 
 /// Tuile d'authentification: Se connecter / Se déconnecter selon l'état
 class SettingsAuthTile extends ConsumerWidget {
@@ -25,14 +28,14 @@ class SettingsAuthTile extends ConsumerWidget {
         final bool isAuthenticated = service.isAuthenticated;
         return ListTile(
           leading: Icon(isAuthenticated ? Icons.logout : Icons.login),
-          title: Text(
+          title: TextVariant(
             isAuthenticated
                 ? LocaleKeys.settings_logout.tr()
                 : LocaleKeys.settings_signin.tr(),
           ),
           subtitle: isAuthenticated
               ? null
-              : Text(LocaleKeys.settings_signin_subtitle.tr()),
+              : TextVariant(LocaleKeys.settings_signin_subtitle.tr()),
           onTap: () async {
             if (isAuthenticated) {
               await vm.confirmAndLogout();
@@ -47,8 +50,8 @@ class SettingsAuthTile extends ConsumerWidget {
           },
         );
       },
-      error: (_, __) => const SizedBox.shrink(),
-      loading: () => const SizedBox.shrink(),
+      error: ErrorPlaceholder.new,
+      loading: CustomLoader.new,
     );
   }
 }

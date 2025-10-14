@@ -141,6 +141,7 @@ class RealHomeViewModel extends _$RealHomeViewModel {
         normalized.isAtSameMomentAs(start) || normalized.isAfter(start);
     final bool isOnOrBeforeEnd =
         normalized.isAtSameMomentAs(end) || normalized.isBefore(end);
+
     return isOnOrAfterStart && isOnOrBeforeEnd;
   }
 
@@ -164,16 +165,19 @@ class RealHomeViewModel extends _$RealHomeViewModel {
 
   /// Build streak message
   String buildStreakMessage() {
+    const int streakRowConst = 7;
+
     switch (streakDays) {
-      case < 7:
+      case < streakRowConst:
         return LocaleKeys.onboarding_streak_message_1.tr(
-          args: <String>[(7 - streakDays).toString()],
+          args: <String>[(streakRowConst - streakDays).toString()],
         );
-      case 7:
+      case streakRowConst:
         return LocaleKeys.onboarding_streak_message_2.tr();
-      case > 7:
+      case > streakRowConst:
         return LocaleKeys.onboarding_streak_message_3.tr();
     }
+
     return '';
   }
 
@@ -182,40 +186,13 @@ class RealHomeViewModel extends _$RealHomeViewModel {
     _navigationService.navigateToAnalyzeWithAi();
   }
 
-  /// On tap review old events
-  void onTapReviewOldEvents() {}
-
-  /// Test notification (for development purposes)
-  Future<void> testNotification() async {
-    try {
-      await _notificationService.showNotification(
-        id: 999,
-        title: 'Test de notification',
-        body: 'Ceci est un test de notification locale',
-        payload: 'test_notification',
-      );
-    } on Exception catch (e, s) {
-      debugPrint('Error showing test notification: $e');
-      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
-    }
-  }
-
-  /// Test Firebase Messaging
-  Future<void> testFirebaseMessaging() async {
-    try {
-      await _notificationService.testFirebaseMessaging();
-    } on Exception catch (e, s) {
-      debugPrint('Error testing Firebase: $e');
-      unawaited(FirebaseCrashlytics.instance.recordError(e, s));
-    }
-  }
-
   /// Get Firebase status
   Future<Map<String, dynamic>> getFirebaseStatus() async {
     try {
       return await _notificationService.getFirebaseMessagingStatus();
     } on Exception catch (e, s) {
       debugPrint('Error getting Firebase status: $e');
+      
       unawaited(FirebaseCrashlytics.instance.recordError(e, s));
       return <String, dynamic>{'error': e.toString()};
     }

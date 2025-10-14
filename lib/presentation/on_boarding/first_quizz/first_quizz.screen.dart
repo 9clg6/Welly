@@ -128,22 +128,15 @@ class _Q2Discovery extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            TextVariant(
               LocaleKeys.onboarding_questionTitle.tr(args: const <String>['2']),
-              style: const TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+              variantType: TextVariantType.displaySmall,
+              fontWeight: FontWeight.w700,
             ),
             const Gap(32),
-            Text(
+            TextVariant(
               LocaleKeys.onboarding_q2_text.tr(),
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-                color: Colors.black,
-              ),
+              variantType: TextVariantType.bodyLarge,
             ),
             const Gap(46),
             ..._answers.mapIndexed((int index, String answer) {
@@ -192,22 +185,15 @@ class _Q3Theme extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            TextVariant(
               LocaleKeys.onboarding_questionTitle.tr(args: const <String>['3']),
-              style: const TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+              variantType: TextVariantType.displaySmall,
+              fontWeight: FontWeight.w700,
             ),
             const Gap(32),
-            Text(
+            TextVariant(
               LocaleKeys.onboarding_q3_text.tr(),
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-                color: Colors.black,
-              ),
+              variantType: TextVariantType.bodyLarge,
             ),
             const Gap(46),
             ..._answers.mapIndexed((int index, String answer) {
@@ -254,22 +240,15 @@ class _Q4PracticeDuration extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            TextVariant(
               LocaleKeys.onboarding_questionTitle.tr(args: const <String>['4']),
-              style: const TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+              variantType: TextVariantType.displaySmall,
+              fontWeight: FontWeight.w700,
             ),
             const Gap(32),
-            Text(
+            TextVariant(
               LocaleKeys.onboarding_q4_text.tr(),
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-                color: Colors.black,
-              ),
+              variantType: TextVariantType.bodyLarge,
             ),
             const Gap(46),
             ..._answers.mapIndexed((int index, String answer) {
@@ -310,22 +289,14 @@ class _Q5Serenity extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            TextVariant(
               LocaleKeys.onboarding_questionTitle.tr(args: const <String>['5']),
-              style: const TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+              variantType: TextVariantType.displaySmall,
             ),
             const Gap(32),
-            Text(
+            TextVariant(
               LocaleKeys.onboarding_q5_text.tr(),
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-                color: Colors.black,
-              ),
+              variantType: TextVariantType.bodyLarge,
             ),
             const Gap(32),
             Row(
@@ -339,13 +310,10 @@ class _Q5Serenity extends ConsumerWidget {
 
                 return ChoiceChip(
                   selected: isSelected,
-                  label: Text(
+                  label: TextVariant(
                     '$score',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                      color: isSelected ? Colors.white : Colors.black,
-                    ),
+                    variantType: TextVariantType.bodyLarge,
+                    color: isSelected ? Colors.white : Colors.black,
                   ),
                   backgroundColor: Colors.white,
                   selectedColor: Colors.black,
@@ -366,6 +334,7 @@ class _Q6Identity extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
     final FirstQuizzViewModel viewModel = ref.watch(
       firstQuizzViewModelProvider.notifier,
     );
@@ -379,22 +348,15 @@ class _Q6Identity extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            TextVariant(
               LocaleKeys.onboarding_questionTitle.tr(args: const <String>['6']),
-              style: const TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+              variantType: TextVariantType.displaySmall,
+              fontWeight: FontWeight.w700,
             ),
             const Gap(32),
-            Text(
+            TextVariant(
               LocaleKeys.onboarding_q6_text.tr(),
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-                color: Colors.black,
-              ),
+              variantType: TextVariantType.bodyLarge,
             ),
             const Gap(24),
             Form(
@@ -412,9 +374,9 @@ class _Q6Identity extends ConsumerWidget {
                         }
                         return null;
                       },
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodyMedium?.copyWith(color: Colors.black),
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: Colors.black,
+                      ),
                       minLines: null,
                       expands: true,
                       controller: viewModel.tempNameController,
@@ -424,9 +386,9 @@ class _Q6Identity extends ConsumerWidget {
                       borderColor: Colors.transparent,
                       focusBorderColor: Colors.transparent,
                       enabledBorderColor: Colors.transparent,
-                      labelStyle: Theme.of(
-                        context,
-                      ).textTheme.bodyMedium?.copyWith(color: Colors.black),
+                      labelStyle: textTheme.bodyMedium?.copyWith(
+                        color: Colors.black,
+                      ),
                       onChanged: viewModel.setTempName,
                     ),
                   ),
@@ -441,9 +403,9 @@ class _Q6Identity extends ConsumerWidget {
                         }
                         return null;
                       },
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodyMedium?.copyWith(color: Colors.black),
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: Colors.black,
+                      ),
                       minLines: null,
                       expands: true,
                       controller: viewModel.tempAgeController,
@@ -452,9 +414,9 @@ class _Q6Identity extends ConsumerWidget {
                       borderColor: Colors.transparent,
                       focusBorderColor: Colors.transparent,
                       enabledBorderColor: Colors.transparent,
-                      labelStyle: Theme.of(
-                        context,
-                      ).textTheme.bodyMedium?.copyWith(color: Colors.black),
+                      labelStyle: textTheme.bodyMedium?.copyWith(
+                        color: Colors.black,
+                      ),
                       onChanged: viewModel.setTempAge,
                     ),
                   ),

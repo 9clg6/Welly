@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:purchases_ui_flutter/views/paywall_view.dart';
 import 'package:welly/core/localization/generated/locale_keys.g.dart';
-import 'package:welly/presentation/on_boarding/steps/paywell/paywall.step.state.dart';
-import 'package:welly/presentation/on_boarding/steps/paywell/paywall.step.view_model.dart';
+import 'package:welly/presentation/on_boarding/steps/paywall/paywall.step.state.dart';
+import 'package:welly/presentation/on_boarding/steps/paywall/paywall.step.view_model.dart';
 import 'package:welly/presentation/widgets/custom_loader.dart';
 import 'package:welly/presentation/widgets/error_placeholder.dart';
 import 'package:welly/presentation/widgets/text_variant.dart';
@@ -26,7 +26,6 @@ class PaywallStep extends ConsumerWidget {
 
     return state.when(
       data: (PaywallStepState data) {
-        // Check if we have offerings available
         if (data.offerings.isEmpty) {
           return Center(
             child: Column(

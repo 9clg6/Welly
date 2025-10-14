@@ -12,6 +12,7 @@ import 'package:welly/core/providers/foundation/services/user.service.dart';
 import 'package:welly/core/providers/presentation/router.provider.dart';
 import 'package:welly/domain/entities/happen_action.entity.dart';
 import 'package:welly/presentation/screens/review/review.state.dart';
+import 'package:welly/presentation/widgets/text_variant.dart';
 
 part 'review.view_model.g.dart';
 
@@ -71,15 +72,11 @@ class ReviewViewModel extends _$ReviewViewModel {
             ],
           ),
           child: Center(
-            child: Text(
+            child: TextVariant(
               LocaleKeys.reviewScreenTitle2.tr(),
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontWeight: FontWeight.w400,
-                decoration: TextDecoration.none,
-              ),
               textAlign: TextAlign.center,
+              variantType: TextVariantType.bodyLarge,
+              color: Colors.black,
             ),
           ),
         ),

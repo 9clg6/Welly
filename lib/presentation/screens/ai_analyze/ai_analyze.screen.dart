@@ -14,6 +14,8 @@ import 'package:welly/presentation/widgets/error_placeholder.dart';
 import 'package:welly/presentation/widgets/tappable_componenent.dart';
 import 'package:welly/presentation/widgets/text_variant.dart';
 
+// TODO(Clement): SPLIT BY WIDGET, CLEAR CODE
+
 /// Ai analyze screen
 @RoutePage()
 class AiAnalyzeScreen extends ConsumerStatefulWidget {
@@ -139,6 +141,8 @@ class _AiAnalyzeScreenState extends ConsumerState<AiAnalyzeScreen>
                                           ),
                                           const Gap(8),
                                           TextVariant(
+                                            // ignore: lines_longer_than_80_chars todo
+                                            // TODO(clement): replace with data.report.statsConfiance.pourcentageCompletion
                                             '7/10',
                                             variantType:
                                                 TextVariantType.titleLarge,
@@ -425,7 +429,7 @@ class _AiAnalyzeScreenState extends ConsumerState<AiAnalyzeScreen>
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: TextVariant(
-                            'Quitter',
+                            LocaleKeys.aiAnalyze_quit.tr(),
                             variantType: TextVariantType.titleMedium,
                             textAlign: TextAlign.center,
                             color: colorScheme.surface,

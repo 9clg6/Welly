@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:welly/core/localization/generated/locale_keys.g.dart';
+import 'package:welly/presentation/widgets/text_variant.dart';
 
 /// Privacy policy screen
 @RoutePage()
@@ -12,22 +13,20 @@ class PrivacyPolicyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(LocaleKeys.privacy_policy_title.tr())),
+      appBar: AppBar(title: TextVariant(LocaleKeys.privacy_policy_title.tr())),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
+            TextVariant(
               LocaleKeys.privacy_policy_title.tr(),
-              style: Theme.of(context).textTheme.headlineSmall,
+              variantType: TextVariantType.headlineSmall,
             ),
             const SizedBox(height: 16),
-            Text(
+            TextVariant(
               LocaleKeys.privacy_policy_last_updated.tr(),
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(fontStyle: FontStyle.italic),
+              style: const TextStyle(fontStyle: FontStyle.italic),
             ),
             const SizedBox(height: 16),
             _buildSectionTitle(
@@ -229,15 +228,15 @@ class PrivacyPolicyScreen extends StatelessWidget {
   }
 
   Widget _buildSectionTitle(BuildContext context, String text) {
-    return Text(text, style: Theme.of(context).textTheme.titleLarge);
+    return TextVariant(text, variantType: TextVariantType.titleLarge);
   }
 
   Widget _buildSubSectionTitle(BuildContext context, String text) {
-    return Text(text, style: Theme.of(context).textTheme.titleMedium);
+    return TextVariant(text, variantType: TextVariantType.titleMedium);
   }
 
   Widget _buildParagraph(BuildContext context, String text) {
-    return Text(text, style: Theme.of(context).textTheme.bodyLarge);
+    return TextVariant(text, variantType: TextVariantType.bodyLarge);
   }
 
   Widget _buildListItem(BuildContext context, String text) {
@@ -246,9 +245,9 @@ class PrivacyPolicyScreen extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('• ', style: Theme.of(context).textTheme.bodyLarge),
+          const TextVariant('• ', variantType: TextVariantType.bodyLarge),
           Expanded(
-            child: Text(text, style: Theme.of(context).textTheme.bodyLarge),
+            child: TextVariant(text, variantType: TextVariantType.bodyLarge),
           ),
         ],
       ),

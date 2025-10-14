@@ -265,6 +265,7 @@ final class AiService {
     return startsBeforeOrToday && endsAfterOrAtWindowStart;
   }
 
+  // TODO(clement): ameliorer ça car pas ouf
   Map<String, String> _formatEvents(List<DailyHappenActionEntity> events) {
     final StringBuffer buffer = StringBuffer();
     for (int i = 0; i < events.length; i++) {

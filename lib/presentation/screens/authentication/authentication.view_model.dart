@@ -84,12 +84,8 @@ class Authentication extends _$Authentication {
           _navigationService.navigateToHome(replace: true);
         }
       }
-
-      // This is the place to trigger navigation or update the UI state
-      // based on the successful login.
       debugPrint('Successfully signed in with Google: ${user?.displayName}');
     } on FirebaseAuthException catch (e, s) {
-      // Handle Firebase-specific errors
       debugPrint('Firebase Auth Error: ${e.message}');
       unawaited(FirebaseCrashlytics.instance.recordError(e, s));
 

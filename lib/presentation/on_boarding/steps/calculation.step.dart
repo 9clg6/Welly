@@ -21,7 +21,7 @@ class _CalculationStepState extends ConsumerState<CalculationStep> {
   void initState() {
     super.initState();
     Future<void>.delayed(const Duration(seconds: 5)).then((_) {
-      ref.read(onBoardingViewModelProvider.notifier).nextStep();
+      ref.watch(onBoardingViewModelProvider.notifier).nextStep();
     });
   }
 

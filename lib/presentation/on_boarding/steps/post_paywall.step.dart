@@ -34,12 +34,10 @@ class PostPaywallStep extends ConsumerWidget {
           const Gap(24),
           ContinueButtonCard(
             onTap: () async {
-              // Request notification permissions before completing onboarding
               await _requestNotificationPermissions(ref);
 
-              // Complete onboarding
               await ref
-                  .read(onBoardingViewModelProvider.notifier)
+                  .watch(onBoardingViewModelProvider.notifier)
                   .completeOnboarding();
             },
             title: LocaleKeys.onboarding_postPaywall_enter.tr(),
@@ -55,17 +53,15 @@ Future<void> _requestNotificationPermissions(WidgetRef ref) async {
   try {
     debugPrint('[PostPaywallStep] Requesting notification permissions...');
 
-    final NotificationService notificationService = await ref.read(
+    final NotificationService notificationService = await ref.watch(
       notificationServiceProvider.future,
     );
-    final TrackingService trackingService = await ref.read(
+    final TrackingService trackingService = await ref.watch(
       trackingServiceProvider,
     );
 
-    // Track permission request
     await trackingService.trackNotificationPermissionRequested();
 
-    // Request permissions
     final bool granted = await notificationService
         .requestPermissionsWithDelay();
 

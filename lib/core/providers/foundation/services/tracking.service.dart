@@ -1,5 +1,5 @@
 import 'package:welly/core/providers/foundation/services/analytics.service.dart';
-import 'package:welly/core/providers/foundation/services/analytics_events.dart';
+import 'package:welly/foundation/events/analytics_events.dart';
 
 /// Enhanced analytics service with predefined tracking methods
 class TrackingService {

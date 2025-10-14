@@ -11,6 +11,7 @@ import 'package:welly/presentation/widgets/custom_button.dart';
 import 'package:welly/presentation/widgets/custom_loader.dart';
 import 'package:welly/presentation/widgets/error_placeholder.dart';
 import 'package:welly/presentation/widgets/gradient_background.dart';
+import 'package:welly/presentation/widgets/text_variant.dart';
 
 /// Review screen
 @RoutePage()
@@ -55,9 +56,10 @@ class _HasDataBody extends ConsumerWidget {
         padding: const EdgeInsets.all(16),
         child: state.requireValue.entries.isEmpty
             ? Center(
-                child: Text(
+                child: TextVariant(
                   LocaleKeys.reviewScreenNoEntries.tr(),
-                  style: const TextStyle(fontSize: 16),
+                  variantType: TextVariantType.bodyLarge,
+                  fontSize: 16,
                 ),
               )
             : Center(
